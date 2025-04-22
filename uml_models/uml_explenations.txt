@@ -1,0 +1,76 @@
+1. Alert Handling System
+
+    Diagram Summary (textual form):
+        AlertGenerator --> Alert (creates)  
+        AlertGenerator --> AlertManager (notifies)  
+        Alert --> Patient (identifies)  
+        AlertManager --> MedicalStaff (routes to)  
+        Patient --> ThresholdRule (has multiple)  
+        AlertGenerator --> Patient (accesses thresholds)  
+
+    Explanation:
+        This system is basically set up to watch patients’ vitals and yell (well, generate an alert) if something goes out of bounds. 
+        The main class here is AlertGenerator, which checks the data constantly and compares it to whatever thresholds are set for the patient. 
+        These rules are stored in ThresholdRule objects so that we can customize things per patient (like one person’s high heart rate might be normal for another).
+        When a rule gets broken, an Alert is created with info like what happened and to who. Then AlertManager takes over and sends that alert to the right medical staff. 
+        That way the generator just does the checking, and the manager does the shouting.
+        Keeping all these parts separate makes it easier to change one thing without breaking the others. Like, you could easily add a new kind of alert without rewriting everything. 
+        It’s a pretty flexible and clean setup.
+
+
+2. Data Storage System
+    
+    Diagram Summary (textual form):
+        DataStorage --> Patient (stores)  
+        Patient --> PatientRecord (aggregates)  
+        DataRetriever --> DataStorage (accesses)  
+        DataStorage --> IdentityManager (verifies)  
+        DataStorage --> DeletionPolicy (uses)  
+        DataStorage --> AccessControlManager (enforces)  
+        
+    Explanation:
+        This part handles saving and looking up all the patient data. DataStorage is the main place everything gets saved. 
+        Each Patient object keeps a list of PatientRecords, which include the measurement, the time it was taken, and what type it was (like heart rate or oxygen levels).
+        We split out PatientRecord so we can easily add extra stuff later—like flags for abnormal values or maybe tags for different conditions. 
+        The DataRetriever is a separate class that just grabs data when needed, keeping reading and writing separate.
+        There’s also an IdentityManager to make sure we’re saving stuff under the right patient ID, and AccessControlManager keeps track of who’s allowed to see what. 
+        DeletionPolicy is in there to clean out old data, which helps with storage limits and staying within legal data rules.
+        The design keeps things organized and secure, and you can tweak rules or access settings without having to touch everything else.
+
+
+3. Patient Identification System
+
+    Diagram Summary (textual form):
+        IdentityManager --> Patient (validates)  
+        IdentityManager --> PatientIdentifier (uses)  
+        Patient --> PatientRecord (has many)  
+        PatientRecord --> Patient (references ID)  
+
+    Explanation:
+        This system just makes sure we always know which patient a piece of data belongs to. The Patient class stores an ID and all their related records. 
+        Each PatientRecord links back to the right patient ID, so we can always track where it came from.
+        Now, sometimes data shows up without a clear ID (like from a smartwatch or external app), so we use PatientIdentifier to try and match it. 
+        The IdentityManager is in charge of running that logic and handling mismatches or weird cases.
+        By keeping identity stuff in its own module, we avoid cluttering up the storage or alert systems with ID logic. 
+        And if we ever want to upgrade to biometric matching or fancy machine learning, we can just swap that part out. It’s all about staying organized and avoiding spaghetti code.
+
+
+4. Data Acces Layer
+
+    Diagram Summary (textual form):
+        TCPDataListener --|> DataListener  
+        WebSocketDataListener --|> DataListener  
+        FileDataListener --|> DataListener  
+        
+        DataListener --> DataParser (uses)  
+        DataParser --> DataSourceAdapter (sends)  
+        DataSourceAdapter --> DataStorage (aggregates)  
+
+    Explanation:
+        This system is for pulling in data from different sources—whether it’s coming through a TCP connection, WebSocket, or just a log file. 
+        All three types of listeners implement the same interface (DataListener), which makes it easy to plug in new types later.
+        Once data comes in, it goes to a DataParser, which turns raw text (like JSON or CSV) into a consistent object we can work with—ParsedData. 
+        After that, the DataSourceAdapter takes over and decides how to pass the parsed data into storage.
+        The adapter can also do extra checks or cleanup before storing, like filtering duplicates or validating entries. 
+        This keeps DataStorage simple and focused only on saving stuff, while all the messy input handling happens earlier.
+        The structure makes things modular, so if we wanted to add a new listener (like from a live API or device), we just implement the DataListener interface and we’re good to go.
