@@ -8,6 +8,12 @@ import com.data_management.FileDataReader;
 
 import java.io.IOException;
 
+/**
+ * Tests the FileDataReader class.
+ * Assumptions:
+ * - Data is read from files in a specified directory.
+ * - Data is correctly added to DataStorage.
+ */
 class FileDataReaderTest {
 
     @Test

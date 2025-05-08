@@ -10,26 +10,54 @@ import java.util.List;
 
 /**
  * Tests the Patient class.
- * Makes sure records are added and retrieved correctly.
+ * Assumptions:
+ * - If no records exist, getRecords should return an empty list.
+ * - Records are filtered correctly based on the time range.
  */
 class PatientTest {
 
     @Test
-    void testGetRecords() {
+    void testAddAndRetrieveRecords() {
         // Create a patient
         Patient patient = new Patient(1);
 
         // Add records
         patient.addRecord(100.0, "HeartRate", 1714376789050L);
         patient.addRecord(120.0, "HeartRate", 1714376789055L);
-        patient.addRecord(80.0, "HeartRate", 1714376789060L);
 
-        // Get records within a time range
+        // Retrieve records within a time range
         List<PatientRecord> records = patient.getRecords(1714376789050L, 1714376789055L);
 
-        // Check the records
+        // Verify the records
         assertEquals(2, records.size());
         assertEquals(100.0, records.get(0).getMeasurementValue());
         assertEquals(120.0, records.get(1).getMeasurementValue());
+    }
+
+    @Test
+    void testGetRecordsWithNoData() {
+        // Create a patient
+        Patient patient = new Patient(1);
+
+        // Try to get records when no data has been added
+        List<PatientRecord> records = patient.getRecords(0, System.currentTimeMillis());
+
+        // Verify that the result is an empty list
+        assertTrue(records.isEmpty());
+    }
+
+    @Test
+    void testGetRecordsOutsideTimeRange() {
+        // Create a patient
+        Patient patient = new Patient(1);
+
+        // Add records
+        patient.addRecord(100.0, "HeartRate", 1714376789050L);
+
+        // Try to get records outside the time range
+        List<PatientRecord> records = patient.getRecords(1714376789000L, 1714376789049L);
+
+        // Verify that the result is an empty list
+        assertTrue(records.isEmpty());
     }
 }
