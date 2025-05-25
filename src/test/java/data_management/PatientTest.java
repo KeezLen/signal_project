@@ -8,14 +8,11 @@ import com.data_management.PatientRecord;
 
 import java.util.List;
 
-/**
- * Tests the Patient class.
- * Assumptions:
- * - If no records exist, getRecords should return an empty list.
- * - Records are filtered correctly based on the time range.
- */
 class PatientTest {
 
+    /**
+     * Tests the functionality of adding and retrieving patient records.
+     */
     @Test
     void testAddAndRetrieveRecords() {
         // Create a patient
@@ -34,6 +31,9 @@ class PatientTest {
         assertEquals(120.0, records.get(1).getMeasurementValue());
     }
 
+    /**
+     * Tests the functionality of retrieving records for a patient with no records.
+     */
     @Test
     void testGetRecordsWithNoData() {
         // Create a patient
@@ -46,6 +46,9 @@ class PatientTest {
         assertTrue(records.isEmpty());
     }
 
+    /**
+     * Tests the functionality of retrieving records outside a specified time range.
+     */
     @Test
     void testGetRecordsOutsideTimeRange() {
         // Create a patient

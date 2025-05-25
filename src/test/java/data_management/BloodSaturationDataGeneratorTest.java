@@ -10,6 +10,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BloodSaturationDataGeneratorTest {
 
+    /**
+     * Tests that the BloodSaturationDataGenerator outputs blood saturation data with correct labels.
+     */
     @Test
     void testGenerateOutputsSaturation() {
         List<String> labels = new ArrayList<>();

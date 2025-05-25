@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests the PatientRecord class to ensure it correctly initializes and retrieves field values.
+ */
 class PatientRecordTest {
     @Test
     void testPatientRecordFields() {

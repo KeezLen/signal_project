@@ -7,19 +7,10 @@ import com.cardio_generator.outputs.OutputStrategy;
 /**
  * This class Generates simulated blood saturation data for patients in a healthcare monitoring simulation.
  * It also implements the PatientDataGenerator interface and makes blood saturation values.
- * 
- * @author [Your Name]
  */
 public class BloodSaturationDataGenerator implements PatientDataGenerator {
 
-    /**
-     * A random number generator used to simulate blood saturation fluctuations.
-     */
     private static final Random random = new Random();
-
-    /**
-     * Stores the last known blood saturation values for each patient.
-     */
     private int[] lastSaturationValues;
 
     /**
@@ -33,7 +24,7 @@ public class BloodSaturationDataGenerator implements PatientDataGenerator {
 
         // Initialize with baseline saturation values for each patient
         for (int i = 1; i <= patientCount; i++) {
-            lastSaturationValues[i] = 95 + random.nextInt(6); // Initializes with a value between 95 and 100
+            lastSaturationValues[i] = 95 + random.nextInt(6); // Value between 95 and 100
         }
     }
 

@@ -10,6 +10,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AlertFactoryTest {
+
+    /**
+     * Tests the AlertFactory classes for creating different types of alerts.
+     */
     @Test
     void testBloodPressureAlertFactory() {
         AlertFactoryMain factory = new BloodPressureAlertFactory();
@@ -20,6 +24,9 @@ class AlertFactoryTest {
         assertEquals(123L, alert.getTimestamp());
     }
 
+    /**
+     * Tests the BloodOxygenAlertFactory for creating blood oxygen alerts.
+     */
     @Test
     void testBloodOxygenAlertFactory() {
         AlertFactoryMain factory = new BloodOxygenAlertFactory();
@@ -30,6 +37,9 @@ class AlertFactoryTest {
         assertEquals(456L, alert.getTimestamp());
     }
 
+    /**
+     * Tests the ECGAlertFactory for creating ECG alerts.
+     */
     @Test
     void testECGAlertFactory() {
         AlertFactoryMain factory = new ECGAlertFactory();

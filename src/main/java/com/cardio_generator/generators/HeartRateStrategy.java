@@ -1,8 +1,6 @@
 package com.cardio_generator.generators;
 
-/**
- * Checks for abnormal heart rates.
- */
+// checks for abnormal heart rates
 public class HeartRateStrategy implements AlertStrategy {
     @Override
     public boolean checkAlert(int patientId, double... values) {

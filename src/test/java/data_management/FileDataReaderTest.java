@@ -12,6 +12,10 @@ import java.util.List;
 
 class FileDataReaderTest {
 
+    /**
+     * Tests the readData method of FileDataReader.
+     * It verifies that data is read correctly from a file and stored in DataStorage.
+     */
     @Test
     void testReadData() throws IOException {
         String fakeDirectoryPath = "fake_directory";
@@ -29,6 +33,10 @@ class FileDataReaderTest {
         assertEquals(200.0, storage.getRecords(1, 1714376789050L, 1714376789051L).get(1).getMeasurementValue());
     }
 
+    /**
+     * Tests that the readData method reads patient data from a file correctly.
+     * It verifies that the data is parsed and stored in DataStorage as expected.
+     */
     @Test
     void testReadDataReadsPatientDataFromFile() throws IOException {
         // Create a temporary directory and file

@@ -9,6 +9,9 @@ import com.cardio_generator.generators.OxygenSaturationStrategy;
 
 public class AlertStrategyTest {
 
+    /**
+     * Tests the AlertStrategy implementations for various conditions.
+     */
     @Test
     void testBloodPressureStrategy() {
         AlertStrategy strategy = new BloodPressureStrategy();
@@ -18,6 +21,9 @@ public class AlertStrategyTest {
         assertTrue(strategy.checkAlert(1, 170, 110));
     }
 
+    /**
+     * Tests the HeartRateStrategy for various heart rate values.
+     */
     @Test
     void testHeartRateStrategy() {
         AlertStrategy strategy = new HeartRateStrategy();
@@ -27,6 +33,9 @@ public class AlertStrategyTest {
         assertFalse(strategy.checkAlert(1)); // No value
     }
 
+    /**
+     * Tests the OxygenSaturationStrategy for various oxygen saturation values.
+     */
     @Test
     void testOxygenSaturationStrategy() {
         AlertStrategy strategy = new OxygenSaturationStrategy();

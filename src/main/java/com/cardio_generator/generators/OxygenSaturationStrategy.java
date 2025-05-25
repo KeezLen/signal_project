@@ -1,8 +1,6 @@
 package com.cardio_generator.generators;
 
-/**
- * Checks for low oxygen saturation.
- */
+// checks for low oxygen saturation levels
 public class OxygenSaturationStrategy implements AlertStrategy {
     @Override
     public boolean checkAlert(int patientId, double... values) {

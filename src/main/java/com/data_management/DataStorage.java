@@ -72,9 +72,7 @@ public class DataStorage {
         return new ArrayList<>(patientMap.values());
     }
 
-    /**
-     * Clears all patient data from the storage.
-     */
+    // clears all patient data from the storage
     public void clear() {
         patientMap.clear();
     }

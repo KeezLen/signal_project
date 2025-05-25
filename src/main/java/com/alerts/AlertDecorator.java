@@ -1,5 +1,9 @@
 package com.alerts;
 
+/**
+ * An abstract class implementing the Alert interface.
+ * Utilizes the Decorator pattern to add extra functionality to a base Alert.
+ */
 public abstract class AlertDecorator implements Alert {
     protected Alert decoratedAlert;
 

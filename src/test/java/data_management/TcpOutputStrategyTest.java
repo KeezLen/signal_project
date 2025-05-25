@@ -11,6 +11,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TcpOutputStrategyTest {
 
+    /**
+     * Tests that the TcpOutputStrategy can be constructed and does not throw an exception
+     * when no client is connected.
+     * This verifies that the server can start without any clients connected.
+     */
     @Test
     void testConstructorAndOutputNoClient() {
         // Use a random port between 20000 and 30000 to avoid conflicts
@@ -20,6 +25,10 @@ class TcpOutputStrategyTest {
         assertDoesNotThrow(() -> strategy.output(1, 123L, "TestLabel", "TestData"));
     }
 
+    /**
+     * Tests that the TcpOutputStrategy can output data when a client is connected.
+     * This verifies that the server can send data to a connected client.
+     */
     @Test
     void testOutputWithClientConnected() throws Exception {
         int port = 21000 + (int)(Math.random() * 10000);

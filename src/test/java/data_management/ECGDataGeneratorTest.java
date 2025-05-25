@@ -10,6 +10,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ECGDataGeneratorTest {
 
+    /**
+     * Tests that the ECGDataGenerator outputs ECG data with correct labels.
+     */
     @Test
     void testECGOutputLabel() {
         List<String> labels = new ArrayList<>();

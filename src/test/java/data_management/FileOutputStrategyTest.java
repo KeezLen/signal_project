@@ -8,6 +8,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FileOutputStrategyTest {
 
+    /**
+     * Tests that the FileOutputStrategy creates a file and writes data correctly.
+     * Verifies that the output file exists and contains the expected content.
+     */
     @Test
     void testOutputCreatesFileAndWritesData() throws IOException {
         Path tempDir = Files.createTempDirectory("outputTest");

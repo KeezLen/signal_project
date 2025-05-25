@@ -14,7 +14,15 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the HealthDataSimulator class.
+ * Verifies singleton behavior, argument parsing, and task scheduling.
+ */
 public class HealthDataSimulatorTest {
+
+    /**
+     * Tests that HealthDataSimulator follows the Singleton pattern.
+     */
     @Test
     void testSingletonInstance() {
         HealthDataSimulator sim1 = HealthDataSimulator.getInstance();
@@ -22,6 +30,9 @@ public class HealthDataSimulatorTest {
         assertSame(sim1, sim2, "Should return the same instance");
     }
 
+    /**
+     * Tests that patient IDs are initialized correctly.
+     */
     @Test
     void testInitializePatientIds() {
         HealthDataSimulator sim = HealthDataSimulator.getInstance();
@@ -29,6 +40,9 @@ public class HealthDataSimulatorTest {
         assertEquals(List.of(1, 2, 3, 4, 5), ids);
     }
 
+    /**
+     * Tests that the help message is printed correctly.
+     */
     @Test
     void testPrintHelpOutputsUsage() {
         HealthDataSimulator sim = HealthDataSimulator.getInstance();
@@ -44,15 +58,9 @@ public class HealthDataSimulatorTest {
         assertTrue(help.contains("Usage: java HealthDataSimulator"), "Help should contain usage info");
     }
 
-    @Test
-    void testParseArgumentsSetsPatientCount() throws Exception {
-        HealthDataSimulator sim = HealthDataSimulator.getInstance();
-        String[] args = {"--patient-count", "7"};
-        simTestableParseArguments(sim, args);
-        // There is no getter for patientCount, so this is just for coverage.
-        // If you add a getter, you can assert the value here.
-    }
-
+    /**
+     * Tests that the patient count is set correctly when valid arguments are provided.
+     */
     @Test
     void testParseArgumentsSetsPatientCountValid() {
         HealthDataSimulator sim = HealthDataSimulator.getInstance();
@@ -61,6 +69,9 @@ public class HealthDataSimulatorTest {
         assertEquals(7, getPrivateInt(sim, "patientCount"));
     }
 
+    /**
+     * Tests that the patient count remains unchanged when invalid arguments are provided.
+     */
     @Test
     void testParseArgumentsSetsPatientCountInvalid() {
         HealthDataSimulator sim = HealthDataSimulator.getInstance();
@@ -70,6 +81,9 @@ public class HealthDataSimulatorTest {
         assertEquals(50, getPrivateInt(sim, "patientCount"));
     }
 
+    /**
+     * Tests that the output strategy is set to ConsoleOutputStrategy.
+     */
     @Test
     void testParseArgumentsSetsConsoleOutput() {
         HealthDataSimulator sim = HealthDataSimulator.getInstance();
@@ -78,6 +92,9 @@ public class HealthDataSimulatorTest {
         assertTrue(getPrivateField(sim, "outputStrategy").getClass().getSimpleName().contains("ConsoleOutputStrategy"));
     }
 
+    /**
+     * Tests that the output strategy is set to FileOutputStrategy.
+     */
     @Test
     void testParseArgumentsSetsFileOutput() throws Exception {
         HealthDataSimulator sim = HealthDataSimulator.getInstance();
@@ -89,6 +106,9 @@ public class HealthDataSimulatorTest {
         Files.deleteIfExists(tempDir);
     }
 
+    /**
+     * Tests that the output strategy is set to WebSocketOutputStrategy.
+     */
     @Test
     void testParseArgumentsSetsWebSocketOutput() {
         HealthDataSimulator sim = HealthDataSimulator.getInstance();
@@ -97,6 +117,9 @@ public class HealthDataSimulatorTest {
         assertTrue(getPrivateField(sim, "outputStrategy").getClass().getSimpleName().contains("WebSocketOutputStrategy"));
     }
 
+    /**
+     * Tests that the output strategy is set to TcpOutputStrategy.
+     */
     @Test
     void testParseArgumentsSetsTcpOutput() {
         HealthDataSimulator sim = HealthDataSimulator.getInstance();
@@ -105,15 +128,20 @@ public class HealthDataSimulatorTest {
         assertTrue(getPrivateField(sim, "outputStrategy").getClass().getSimpleName().contains("TcpOutputStrategy"));
     }
 
+    /**
+     * Tests that an unknown output type falls back to ConsoleOutputStrategy.
+     */
     @Test
     void testParseArgumentsUnknownOutputType() {
         HealthDataSimulator sim = HealthDataSimulator.getInstance();
         String[] args = {"--output", "unknownType"};
         simTestableParseArguments(sim, args);
-        // Should fallback to ConsoleOutputStrategy
         assertTrue(getPrivateField(sim, "outputStrategy").getClass().getSimpleName().contains("ConsoleOutputStrategy"));
     }
 
+    /**
+     * Tests that a scheduled task runs successfully.
+     */
     @Test
     void testScheduleTaskRunsRunnable() throws InterruptedException {
         HealthDataSimulator sim = HealthDataSimulator.getInstance();
@@ -129,21 +157,24 @@ public class HealthDataSimulatorTest {
         }
     }
 
+    /**
+     * Tests that scheduling tasks for an empty list of patients does not throw exceptions.
+     */
     @Test
     void testScheduleTasksForPatientsWithEmptyList() {
         HealthDataSimulator sim = HealthDataSimulator.getInstance();
-        // Set up a scheduler to avoid NullPointerException
         setPrivateField(sim, "scheduler", java.util.concurrent.Executors.newSingleThreadScheduledExecutor());
         List<Integer> emptyList = List.of();
         assertDoesNotThrow(() -> simTestableScheduleTasksForPatients(sim, emptyList));
     }
 
+    /**
+     * Tests that scheduling tasks for multiple patients does not throw exceptions.
+     */
     @Test
     void testScheduleTasksForPatientsWithMultiplePatients() {
         HealthDataSimulator sim = HealthDataSimulator.getInstance();
-        // Set up a scheduler to avoid NullPointerException
         setPrivateField(sim, "scheduler", java.util.concurrent.Executors.newSingleThreadScheduledExecutor());
-        // Use a small list of patient IDs
         List<Integer> patientIds = Arrays.asList(1, 2, 3);
         assertDoesNotThrow(() -> simTestableScheduleTasksForPatients(sim, patientIds));
     }

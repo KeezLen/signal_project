@@ -10,20 +10,13 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Outputs patient data to files in a specified directory.
  * This class implements the OutputStrategy interface and writes data to files based on the label provided. Each label corresponds to a separate file.
- *
  */
 public class FileOutputStrategy implements OutputStrategy {
 
     // Changed variable name to camelCase
-    /**
-     * The base directory where output files will be created.
-     */
     private String baseDirectory;
 
     // Changed variable name to camelCase and made it private for encapsulation
-    /**
-     * A map to store file paths for each label to avoid recomputing paths.
-     */
     private final ConcurrentHashMap<String, String> fileMap = new ConcurrentHashMap<>();
 
     // Changed method to a proper constructor

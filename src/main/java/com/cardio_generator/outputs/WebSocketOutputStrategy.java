@@ -24,9 +24,7 @@ public class WebSocketOutputStrategy implements OutputStrategy {
         }
     }
 
-    /**
-     * Stops the underlying WebSocket server.
-     */
+    // stops the WebSocket server gracefully
     public void stopServer() throws InterruptedException {
         if (server != null) {
             server.stop();

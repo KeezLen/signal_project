@@ -129,9 +129,7 @@ public class HealthDataSimulator {
         }
     }
 
-    /**
-     * Prints help information for using the simulator.
-     */
+    // prints help method to display usage instructions
     private void printHelp() {
         System.out.println("Usage: java HealthDataSimulator [options]");
         System.out.println("Options:");

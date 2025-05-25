@@ -15,11 +15,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class WebSocketIntegrationTest {
 
+    /**
+     * This test verifies the integration of WebSocket data flow and alert generation.
+     * It checks if the WebSocket server can send data, the client can receive it,
+     * and the AlertGenerator can evaluate the data to generate alerts.
+     */
     @AfterEach
     void cleanup() {
         DataStorage.getInstance().clear();
     }
 
+    /**
+     * Tests the WebSocket data flow and alert generation.
+     * It starts a WebSocket server, connects a client, sends data that should trigger an alert,
+     * and verifies that the alert is generated correctly.
+     */
     @Test
     void testWebSocketDataFlowAndAlertGeneration() throws Exception {
         int port = 24567; // Use a random high port to avoid conflicts

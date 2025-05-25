@@ -9,6 +9,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AlertDecoratorTest {
 
+    /**
+     * Tests the functionality of the Alert decorators.
+     */
     @Test
     void testPriorityDecorator() {
         Alert alert = new BasicAlert("1", "Condition", 123L);
@@ -16,6 +19,9 @@ class AlertDecoratorTest {
         assertTrue(alert.getCondition().contains("PRIORITY: HIGH"));
     }
 
+    /**
+     * Tests the functionality of the RepeatedAlertDecorator.
+     */
     @Test
     void testRepeatedDecorator() {
         Alert alert = new BasicAlert("1", "Condition", 123L);

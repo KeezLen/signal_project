@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.cardio_generator.outputs.OutputStrategy;
 
+// This class generates alerts for patients
 public class AlertGenerator implements PatientDataGenerator {
 
     // Changed variable name to follow UPPER_SNAKE_CASE for constants

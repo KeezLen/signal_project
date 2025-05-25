@@ -10,6 +10,10 @@ import java.util.List;
 
 class DataStorageTest {
 
+    /**
+     * Tests the functionality of the DataStorage class.
+     * Verifies that patient data can be added and retrieved correctly.
+     */
     @Test
     void testAddAndRetrievePatientData() {
         DataStorage storage = DataStorage.getInstance();
@@ -24,6 +28,9 @@ class DataStorageTest {
         assertEquals("HeartRate", records.get(0).getRecordType());
     }
 
+    /**
+     * Tests that the DataStorage can handle multiple records for the same patient.
+     */
     @Test
     void testGetRecordsForNonExistentPatient() {
         DataStorage storage = DataStorage.getInstance();
@@ -34,6 +41,10 @@ class DataStorageTest {
         assertTrue(records.isEmpty());
     }
 
+    /**
+     * Tests that the DataStorage can handle multiple records for different patients.
+     * Verifies that records are stored and retrieved correctly for each patient.
+     */
     @Test
     void testAddAndRetrieveMultiplePatients() {
         DataStorage storage = DataStorage.getInstance();

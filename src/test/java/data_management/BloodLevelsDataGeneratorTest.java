@@ -8,8 +8,15 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the BloodLevelsDataGenerator class.
+ * Verifies that blood level data is generated and output correctly.
+ */
 class BloodLevelsDataGeneratorTest {
 
+    /**
+     * Tests that the BloodLevelsDataGenerator outputs blood level data with correct labels.
+     */
     @Test
     void testGenerateOutputsBloodLevels() {
         List<String> labels = new ArrayList<>();

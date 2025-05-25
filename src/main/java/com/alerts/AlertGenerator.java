@@ -175,7 +175,7 @@ public class AlertGenerator {
                 factory = new BloodPressureAlertFactory(); // fallback
         }
         Alert alert = factory.createAlert(patientId, condition, timestamp);
-        // Example priority and repetition decorators!
+        // Example priority and repetition decorators
         alert = new PriorityAlertDecorator(alert, "HIGH");
         alert = new RepeatedAlertDecorator(alert, 3);
         System.out.println("ALERT: " + alert.getCondition() + " for Patient ID: " + alert.getPatientId() + " at " + alert.getTimestamp());

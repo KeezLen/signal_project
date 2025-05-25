@@ -1,10 +1,5 @@
 package data_management;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 
 import com.alerts.AlertGenerator;
@@ -13,6 +8,10 @@ import com.data_management.Patient;
 
 class AlertGeneratorTest {
 
+    /**
+     * Tests the AlertGenerator's ability to evaluate patient data and trigger alerts.
+     * This test checks if the generator correctly identifies conditions that require alerts.
+     */
     @Test
     void testEvaluateDataTriggersAlerts() {
         DataStorage storage = DataStorage.getInstance();
@@ -28,6 +27,10 @@ class AlertGeneratorTest {
         generator.evaluateData(patient);
     }
 
+    /**
+     * Tests the AlertGenerator's ability to evaluate patient data without triggering alerts.
+     * This test checks if the generator correctly identifies normal conditions that do not require alerts.
+     */
     @Test
     void testEvaluateDataWithNoAlerts() {
         DataStorage storage = DataStorage.getInstance();
@@ -43,6 +46,10 @@ class AlertGeneratorTest {
         generator.evaluateData(patient);
     }
 
+    /**
+     * Tests the AlertGenerator's ability to handle edge cases in patient data.
+     * This test checks if the generator can evaluate data that may be at the boundary of alert conditions.
+     */
     @Test
     void testEvaluateDataWithEdgeCases() {
         DataStorage storage = DataStorage.getInstance();
@@ -58,6 +65,10 @@ class AlertGeneratorTest {
         generator.evaluateData(patient);
     }
 
+    /**
+     * Tests the AlertGenerator's ability to evaluate data for multiple patients.
+     * This test checks if the generator can handle multiple patients and their respective data correctly.
+     */
     @Test
     void testEvaluateDataWithMultiplePatients() {
         DataStorage storage = DataStorage.getInstance();

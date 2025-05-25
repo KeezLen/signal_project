@@ -11,6 +11,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BloodPressureDataGeneratorTest {
 
+    /**
+     * Tests that the BloodPressureDataGenerator outputs blood pressure data with correct labels.
+     */
     @Test
     void testGenerateAlwaysTriggersAlert() {
         List<String> outputs = new ArrayList<>();
@@ -28,6 +31,9 @@ class BloodPressureDataGeneratorTest {
         assertTrue(outputs.get(0).contains("ALERT"), "Alert message should contain 'ALERT'");
     }
 
+    /**
+     * Tests that the BloodPressureDataGenerator does not trigger an alert when the strategy indicates no alert.
+     */
     @Test
     void testGenerateDoesNotTriggerAlert() {
         List<String> outputs = new ArrayList<>();

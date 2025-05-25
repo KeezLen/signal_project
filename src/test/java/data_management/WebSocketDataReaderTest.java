@@ -11,6 +11,12 @@ import java.io.PrintStream;
 import static org.junit.jupiter.api.Assertions.*;
 
 class WebSocketDataReaderTest {
+
+    /**
+     * Tests the WebSocketDataReader's ability to read and process messages correctly.
+     * It simulates a WebSocket server sending messages and verifies that the DataStorage
+     * receives and stores them correctly.
+     */
     @Test
     void testMalformedMessageHandling() {
         DataStorage storage = DataStorage.getInstance();
@@ -45,6 +51,11 @@ class WebSocketDataReaderTest {
         assertTrue(storage.getAllPatients().isEmpty(), "No patient data should be added for malformed messages");
     }
 
+    /**
+     * Tests the WebSocketDataReader's ability to handle connection failures gracefully.
+     * It simulates a scenario where the WebSocket server is unavailable and verifies that
+     * the reader does not throw an exception but logs an appropriate error message.
+     */
     @Test
     void testWebSocketConnectionFailure() {
         DataStorage storage = DataStorage.getInstance();
@@ -71,6 +82,11 @@ class WebSocketDataReaderTest {
                 "Error output should indicate connection failure. Actual: " + errorOutput);
     }
 
+    /**
+     * Tests the WebSocketDataReader's ability to handle unexpected server disconnects.
+     * It simulates a scenario where the server stops unexpectedly and verifies that
+     * the reader detects the disconnect and logs an appropriate error message.
+     */
     @Test
     void testServerDisconnectsUnexpectedly() throws Exception {
         int port = 24680;
@@ -105,6 +121,10 @@ class WebSocketDataReaderTest {
         );
     }
 
+    /**
+     * Tests the WebSocketDataReader's ability to handle data loss when the server disconnects.
+     * It verifies that messages sent before the disconnect are stored, but those sent after are not.
+     */
     @Test
     void testDataLossOnServerDisconnect() throws Exception {
         int port = 24681;
@@ -165,6 +185,11 @@ class WebSocketDataReaderTest {
         assertFalse(patient2Has105, "Patient 2 should NOT have ECG 1.05 after disconnect");
     }
 
+    /**
+     * Tests the WebSocketDataReader's ability to handle concurrent data updates.
+     * It simulates multiple threads sending data to the server and verifies that
+     * all messages are correctly stored in DataStorage.
+     */
     @Test
     void testConcurrentDataUpdates() throws Exception {
         int port = 24682;

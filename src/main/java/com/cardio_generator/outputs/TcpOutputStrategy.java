@@ -15,19 +15,14 @@ import java.util.concurrent.Executors;
  */
 public class TcpOutputStrategy implements OutputStrategy {
 
-    /**
-     * The server socket used to listen for incoming client connections.
-     */
+    
+    //The server socket used to listen for incoming client connections.
     private ServerSocket serverSocket;
 
-    /**
-     * The client socket representing the connected client.
-     */
+    // The client socket representing the connected client.
     private Socket clientSocket;
 
-    /**
-     * The writer used to send data to the connected client.
-     */
+    //The writer used to send data to the connected client.
     private PrintWriter out;
 
     /**
