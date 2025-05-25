@@ -164,4 +164,49 @@ class WebSocketDataReaderTest {
         assertFalse(patient1Has80, "Patient 1 should NOT have HeartRate 80.0 after disconnect");
         assertFalse(patient2Has105, "Patient 2 should NOT have ECG 1.05 after disconnect");
     }
+
+    @Test
+    void testConcurrentDataUpdates() throws Exception {
+        int port = 24682;
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
+
+        WebSocketOutputStrategy server = new WebSocketOutputStrategy(port);
+        WebSocketDataReader client = new WebSocketDataReader("ws://localhost:" + port);
+        client.start(storage);
+
+        Thread.sleep(500);
+
+        int numThreads = 5;
+        int messagesPerThread = 10;
+        Thread[] threads = new Thread[numThreads];
+
+        for (int t = 0; t < numThreads; t++) {
+            final int threadId = t + 1;
+            threads[t] = new Thread(() -> {
+                for (int i = 0; i < messagesPerThread; i++) {
+                    server.output(threadId, System.currentTimeMillis(), "HeartRate", String.valueOf(60 + i));
+                    try { Thread.sleep(10); } catch (InterruptedException ignored) {}
+                }
+            });
+            threads[t].start();
+        }
+
+        for (Thread thread : threads) {
+            thread.join();
+        }
+
+        // Wait for all messages to be processed
+        Thread.sleep(500);
+
+        // Check that all records are present for each patient/thread
+        for (int t = 0; t < numThreads; t++) {
+            int patientId = t + 1;
+            long now = System.currentTimeMillis();
+            // Use DataStorage's getRecords to get all records for this patient
+            var records = storage.getRecords(patientId, 0, now);
+            assertEquals(messagesPerThread, records.size(),
+                "Patient " + patientId + " should have " + messagesPerThread + " records, found: " + records.size());
+        }
+    }
 }
