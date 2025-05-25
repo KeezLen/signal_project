@@ -35,4 +35,10 @@ public class FileDataReader implements DataReader {
             }
         }
     }
+
+    @Override
+    public void start(DataStorage dataStorage) throws IOException {
+        // For file-based reading, just call readData once (no continuous updates)
+        readData(dataStorage);
+    }
 }
