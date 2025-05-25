@@ -28,22 +28,7 @@ public class WebSocketDataReader implements DataReader {
 
             @Override
             public void onMessage(String message) {
-                try {
-                    // Example message: "1,1714376789050,HeartRate,120.0"
-                    String[] parts = message.split(",", 4);
-                    if (parts.length == 4) {
-                        int patientId = Integer.parseInt(parts[0]);
-                        long timestamp = Long.parseLong(parts[1]);
-                        String label = parts[2];
-                        double value = Double.parseDouble(parts[3]);
-                        dataStorage.addPatientData(patientId, value, label, timestamp);
-                    } else {
-                        System.err.println("Malformed message: " + message);
-                    }
-                } catch (Exception e) {
-                    System.err.println("Error parsing message: " + message);
-                    e.printStackTrace();
-                }
+                handleMessage(message, dataStorage);
             }
 
             @Override
@@ -58,5 +43,26 @@ public class WebSocketDataReader implements DataReader {
             }
         };
         client.connect();
+    }
+
+    protected void handleMessage(String message, DataStorage dataStorage) {
+        if (message == null || message.isEmpty()) {
+            System.err.println("Received empty or null message.");
+            return;
+        }
+        try {
+            String[] parts = message.split(",", 4);
+            if (parts.length != 4) {
+                System.err.println("Malformed message: " + message);
+                return;
+            }
+            int patientId = Integer.parseInt(parts[0]);
+            long timestamp = Long.parseLong(parts[1]);
+            String label = parts[2];
+            double value = Double.parseDouble(parts[3]);
+            dataStorage.addPatientData(patientId, value, label, timestamp);
+        } catch (Exception e) {
+            System.err.println("Error parsing message: " + message);
+        }
     }
 }
