@@ -42,13 +42,12 @@ public class WebSocketDataReader implements DataReader {
 
             @Override
             public void onClose(int code, String reason, boolean remote) {
-                System.out.println("WebSocket closed: " + reason);
+                System.err.println("WebSocket connection closed: " + reason);
             }
 
             @Override
             public void onError(Exception ex) {
                 System.err.println("WebSocket error: " + ex.getMessage());
-                ex.printStackTrace();
             }
         };
         client.connect();
