@@ -104,4 +104,64 @@ class WebSocketDataReaderTest {
             "Error output should indicate server disconnect. Actual: " + errorOutput
         );
     }
+
+    @Test
+    void testDataLossOnServerDisconnect() throws Exception {
+        int port = 24681;
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
+
+        // Start server and client
+        WebSocketOutputStrategy server = new WebSocketOutputStrategy(port);
+        WebSocketDataReader client = new WebSocketDataReader("ws://localhost:" + port);
+        client.start(storage);
+
+        // Wait for connection
+        Thread.sleep(500);
+
+        // Send messages before disconnect
+        server.output(1, System.currentTimeMillis(), "HeartRate", "70.0");
+        server.output(2, System.currentTimeMillis(), "ECG", "0.95");
+
+        // Wait for messages to be processed
+        Thread.sleep(300);
+
+        // Stop the server to simulate disconnect
+        server.stopServer();
+
+        // Try to send more messages after disconnect (these should not be received)
+        try {
+            server.output(1, System.currentTimeMillis(), "HeartRate", "80.0");
+            server.output(2, System.currentTimeMillis(), "ECG", "1.05");
+        } catch (Exception ignored) {}
+
+        // Wait for any late messages
+        Thread.sleep(300);
+
+        // Check that only the first messages are present
+        boolean patient1Has70 = storage.getAllPatients().stream()
+            .filter(p -> p.getPatientId() == 1)
+            .flatMap(p -> p.getRecords().stream())
+            .anyMatch(r -> r.getRecordType().equals("HeartRate") && r.getMeasurementValue() == 70.0);
+
+        boolean patient2Has095 = storage.getAllPatients().stream()
+            .filter(p -> p.getPatientId() == 2)
+            .flatMap(p -> p.getRecords().stream())
+            .anyMatch(r -> r.getRecordType().equals("ECG") && r.getMeasurementValue() == 0.95);
+
+        boolean patient1Has80 = storage.getAllPatients().stream()
+            .filter(p -> p.getPatientId() == 1)
+            .flatMap(p -> p.getRecords().stream())
+            .anyMatch(r -> r.getRecordType().equals("HeartRate") && r.getMeasurementValue() == 80.0);
+
+        boolean patient2Has105 = storage.getAllPatients().stream()
+            .filter(p -> p.getPatientId() == 2)
+            .flatMap(p -> p.getRecords().stream())
+            .anyMatch(r -> r.getRecordType().equals("ECG") && r.getMeasurementValue() == 1.05);
+
+        assertTrue(patient1Has70, "Patient 1 should have HeartRate 70.0 before disconnect");
+        assertTrue(patient2Has095, "Patient 2 should have ECG 0.95 before disconnect");
+        assertFalse(patient1Has80, "Patient 1 should NOT have HeartRate 80.0 after disconnect");
+        assertFalse(patient2Has105, "Patient 2 should NOT have ECG 1.05 after disconnect");
+    }
 }

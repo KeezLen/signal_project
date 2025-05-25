@@ -55,6 +55,15 @@ public class Patient {
     }
 
     /**
+     * Gets all records for this patient.
+     *
+     * @return A list of all patient records.
+     */
+    public List<PatientRecord> getRecords() {
+        return getRecords(0, System.currentTimeMillis());
+    }
+
+    /**
      * Gets the patient's ID.
      *
      * @return The patient's ID.
