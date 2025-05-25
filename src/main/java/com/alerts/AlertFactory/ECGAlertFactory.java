@@ -1,11 +1,10 @@
 package com.alerts.AlertFactory;
 
-import com.alerts.Alert;
-import com.alerts.ECGAlert;
+import com.alerts.*;
 
 public class ECGAlertFactory extends com.alerts.AlertFactoryMain {
     @Override
     public Alert createAlert(String patientId, String condition, long timestamp) {
-        return new ECGAlert(patientId, condition, timestamp);
+        return new BasicAlert(patientId, condition, timestamp);
     }
 }
