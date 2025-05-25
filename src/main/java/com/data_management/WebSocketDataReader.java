@@ -10,6 +10,15 @@ import java.io.IOException;
 
 public class WebSocketDataReader implements DataReader {
     private WebSocketClient client;
+    private String uri; 
+
+    public WebSocketDataReader(String uri) {
+        this.uri = uri;
+    }
+
+    public WebSocketDataReader() {
+        this("ws://localhost:12345"); // Default URI for backward compatibility
+    }
 
     @Override
     public void readData(DataStorage dataStorage) throws IOException {
@@ -19,7 +28,7 @@ public class WebSocketDataReader implements DataReader {
 
     @Override
     public void start(DataStorage dataStorage) throws IOException {
-        URI serverUri = URI.create("ws://localhost:12345"); // Adjust port as needed
+        URI serverUri = URI.create(uri); // Use the instance URI
         client = new WebSocketClient(serverUri) {
             @Override
             public void onOpen(ServerHandshake handshakedata) {
