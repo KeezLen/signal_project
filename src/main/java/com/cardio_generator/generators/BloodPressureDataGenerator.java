@@ -9,10 +9,16 @@ public class BloodPressureDataGenerator implements PatientDataGenerator {
 
     private int[] lastSystolicValues;
     private int[] lastDiastolicValues;
+    private AlertStrategy alertStrategy;
 
     public BloodPressureDataGenerator(int patientCount) {
+        this(patientCount, new BloodPressureStrategy());
+    }
+
+    public BloodPressureDataGenerator(int patientCount, AlertStrategy alertStrategy) {
         lastSystolicValues = new int[patientCount + 1];
         lastDiastolicValues = new int[patientCount + 1];
+        this.alertStrategy = alertStrategy;
 
         // Initialize with baseline values for each patient
         for (int i = 1; i <= patientCount; i++) {
@@ -38,6 +44,12 @@ public class BloodPressureDataGenerator implements PatientDataGenerator {
                     Double.toString(newSystolicValue));
             outputStrategy.output(patientId, System.currentTimeMillis(), "DiastolicPressure",
                     Double.toString(newDiastolicValue));
+
+            // Use the strategy to check for alerts
+            if (alertStrategy != null && alertStrategy.checkAlert(patientId, newSystolicValue, newDiastolicValue)) {
+                outputStrategy.output(patientId, System.currentTimeMillis(), "BloodPressureAlert",
+                        "ALERT: Critical blood pressure detected!");
+            }
         } catch (Exception e) {
             System.err.println("An error occurred while generating blood pressure data for patient " + patientId);
             e.printStackTrace(); // This will print the stack trace to help identify where the error occurred.

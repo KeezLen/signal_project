@@ -1,0 +1,44 @@
+package data_managements;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import com.cardio_generator.generators.AlertStrategy;
+import com.cardio_generator.generators.BloodPressureStrategy;
+import com.cardio_generator.generators.HeartRateStrategy;
+import com.cardio_generator.generators.OxygenSaturationStrategy;
+
+class AlertStrategyTest {
+
+    @Test
+    void testBloodPressureStrategy() {
+        AlertStrategy strategy = new BloodPressureStrategy();
+        // No alert
+        assertFalse(strategy.checkAlert(1, 120, 80));
+        // Systolic critical
+        assertTrue(strategy.checkAlert(1, 170, 80));
+        // Diastolic critical
+        assertTrue(strategy.checkAlert(1, 120, 110));
+        // Both critical
+        assertTrue(strategy.checkAlert(1, 170, 110));
+    }
+
+    @Test
+    void testHeartRateStrategy() {
+        AlertStrategy strategy = new HeartRateStrategy();
+        // Normal
+        assertFalse(strategy.checkAlert(1, 70));
+        // Low
+        assertTrue(strategy.checkAlert(1, 40));
+        // High
+        assertTrue(strategy.checkAlert(1, 130));
+    }
+
+    @Test
+    void testOxygenSaturationStrategy() {
+        AlertStrategy strategy = new OxygenSaturationStrategy();
+        // Normal
+        assertFalse(strategy.checkAlert(1, 98));
+        // Low
+        assertTrue(strategy.checkAlert(1, 90));
+    }
+}

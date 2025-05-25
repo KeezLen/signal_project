@@ -3,7 +3,9 @@ package com.alerts;
 import com.data_management.DataStorage;
 import com.data_management.Patient;
 import com.data_management.PatientRecord;
-
+import com.alerts.AlertFactory.BloodPressureAlertFactory;
+import com.alerts.AlertFactory.BloodOxygenAlertFactory;
+import com.alerts.AlertFactory.ECGAlertFactory;
 import java.util.List;
 
 /**
@@ -56,7 +58,7 @@ public class AlertGenerator {
 
                 // Check if systolic pressure is too high or too low
                 if (currentSystolic > 180 || currentSystolic < 90) {
-                    triggerAlert(new Alert(String.valueOf(patientId), "Critical Systolic Pressure", record.getTimestamp()));
+                    triggerAlert("BloodPressure", String.valueOf(patientId), "Critical Systolic Pressure", record.getTimestamp());
                 }
 
                 // Check for trends (e.g., increasing or decreasing)
@@ -68,7 +70,7 @@ public class AlertGenerator {
 
                 // Trigger an alert if the trend continues for 3 readings
                 if (consecutiveTrendCount >= 3) {
-                    triggerAlert(new Alert(String.valueOf(patientId), "Blood Pressure Trend Alert", record.getTimestamp()));
+                    triggerAlert("BloodPressure", String.valueOf(patientId), "Blood Pressure Trend Alert", record.getTimestamp());
                     consecutiveTrendCount = 0; // Reset after triggering
                 }
 
@@ -78,7 +80,7 @@ public class AlertGenerator {
 
                 // Check if diastolic pressure is too high or too low
                 if (currentDiastolic > 120 || currentDiastolic < 60) {
-                    triggerAlert(new Alert(String.valueOf(patientId), "Critical Diastolic Pressure", record.getTimestamp()));
+                    triggerAlert("BloodPressure", String.valueOf(patientId), "Critical Diastolic Pressure", record.getTimestamp());
                 }
 
                 lastDiastolic = currentDiastolic; // Update the last diastolic value
@@ -99,7 +101,7 @@ public class AlertGenerator {
 
                 // Trigger an alert if saturation is below 92%
                 if (saturation < 92) {
-                    triggerAlert(new Alert(String.valueOf(patientId), "Low Saturation Alert", record.getTimestamp()));
+                    triggerAlert("BloodOxygen", String.valueOf(patientId), "Low Saturation Alert", record.getTimestamp());
                 }
             }
         }
@@ -126,7 +128,7 @@ public class AlertGenerator {
 
         // Trigger an alert if both conditions are true
         if (lowSystolic && lowSaturation) {
-            triggerAlert(new Alert(String.valueOf(patientId), "Hypotensive Hypoxemia Alert", System.currentTimeMillis()));
+            triggerAlert("BloodOxygen", String.valueOf(patientId), "Hypotensive Hypoxemia Alert", System.currentTimeMillis());
         }
     }
 
@@ -143,7 +145,7 @@ public class AlertGenerator {
 
                 // Trigger an alert if heart rate is abnormal
                 if (heartRate > 120 || heartRate < 50) {
-                    triggerAlert(new Alert(String.valueOf(patientId), "Abnormal Heart Rate Alert", record.getTimestamp()));
+                    triggerAlert("ECG", String.valueOf(patientId), "Abnormal Heart Rate Alert", record.getTimestamp());
                 }
             }
         }
@@ -152,10 +154,27 @@ public class AlertGenerator {
     /**
      * Creates an alert and prints it to the console.
      *
-     * @param alert The alert to be triggered.
+     * @param alertType The type of alert (e.g., BloodPressure, BloodOxygen, ECG).
+     * @param patientId The ID of the patient.
+     * @param condition The condition triggering the alert.
+     * @param timestamp The time of the alert.
      */
-    private void triggerAlert(Alert alert) {
-        // Print the alert details
+    private void triggerAlert(String alertType, String patientId, String condition, long timestamp) {
+        AlertFactoryMain factory;
+        switch (alertType) {
+            case "BloodPressure":
+                factory = new BloodPressureAlertFactory();
+                break;
+            case "BloodOxygen":
+                factory = new BloodOxygenAlertFactory();
+                break;
+            case "ECG":
+                factory = new ECGAlertFactory();
+                break;
+            default:
+                factory = new BloodPressureAlertFactory(); // fallback
+        }
+        Alert alert = factory.createAlert(patientId, condition, timestamp);
         System.out.println("ALERT: " + alert.getCondition() + " for Patient ID: " + alert.getPatientId() + " at " + alert.getTimestamp());
     }
 }
