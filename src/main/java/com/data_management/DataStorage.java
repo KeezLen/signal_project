@@ -13,13 +13,21 @@ import com.alerts.AlertGenerator;
  * patient IDs.
  */
 public class DataStorage {
+    private static DataStorage instance; // Singleton instance
+
     private Map<Integer, Patient> patientMap; // Stores patient objects by their ID.
 
-    /**
-     * Creates a new DataStorage instance.
-     */
-    public DataStorage() {
+    // Private constructor prevents instantiation from other classes
+    private DataStorage() {
         this.patientMap = new HashMap<>();
+    }
+
+    // Static method to get the singleton instance
+    public static synchronized DataStorage getInstance() {
+        if (instance == null) {
+            instance = new DataStorage();
+        }
+        return instance;
     }
 
     /**
@@ -65,13 +73,20 @@ public class DataStorage {
     }
 
     /**
+     * Clears all patient data from the storage.
+     */
+    public void clear() {
+        patientMap.clear();
+    }
+
+    /**
      * The main method for testing DataStorage.
      *
      * @param args Command-line arguments.
      */
     public static void main(String[] args) {
         try {
-            DataStorage storage = new DataStorage();
+            DataStorage storage = DataStorage.getInstance();
 
             // Add mock data
             storage.addPatientData(1, 120.0, "HeartRate", 1714376789050L);
